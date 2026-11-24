@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Admin Login - Kamaldeep Portfolio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0a0a0d;--card:rgba(120,190,255,.06);--bd:rgba(125,200,255,.16);--tx:#eef6ff;--mu:#9db6d4;--a:#2563eb;--b:#38bdf8;--c:#7dd3fc;color-scheme:dark}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{background:#0a0a0d;color:var(--tx);font-family:Inter,system-ui,sans-serif;line-height:1.6;display:flex;align-items:center;justify-content:center;padding:20px;position:relative;overflow:hidden}
+#particles{position:fixed;top:0;left:0;width:100%;height:100%;z-index:-1;pointer-events:none}
+#particles canvas{display:block;width:100%;height:100%}
+.blob{position:fixed;border-radius:50%;filter:blur(90px);opacity:.35;z-index:-1;animation:float 14s ease-in-out infinite}
+.b1{width:420px;height:420px;background:var(--a);top:-100px;left:-100px}
+.b2{width:380px;height:380px;background:#1d4ed8;bottom:-80px;right:-80px;animation-delay:-5s}
+@keyframes float{50%{transform:translate(60px,40px) scale(1.15)}}
+
+.login-card{width:100%;max-width:420px;background:var(--card);border:1px solid var(--bd);border-radius:20px;padding:40px;backdrop-filter:blur(20px);animation:slideUp .6s cubic-bezier(.2,.8,.2,1)}
+@keyframes slideUp{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:none}}
+
+.login-header{text-align:center;margin-bottom:32px}
+.login-header h1{font-size:2rem;background:linear-gradient(90deg,var(--a),var(--b),var(--c));-webkit-background-clip:text;background-clip:text;color:transparent}
+.login-header p{color:var(--mu);margin-top:8px}
+
+.login-form{display:flex;flex-direction:column;gap:20px}
+.form-group{display:flex;flex-direction:column;gap:8px}
+label{font-size:.85rem;color:var(--mu);font-weight:500}
+input{padding:14px 16px;border-radius:12px;border:1px solid var(--bd);background:rgba(255,255,255,.05);color:var(--tx);font:inherit;transition:.2s;width:100%}
+input:focus{outline:none;border-color:var(--b);box-shadow:0 0 0 3px rgba(56,189,248,.2)}
+input::placeholder{color:rgba(157,182,212,.4)}
+
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:14px 24px;border-radius:12px;font-weight:600;font-size:.95rem;cursor:pointer;transition:.2s;border:none;font-family:inherit}
+.btn-primary{background:linear-gradient(135deg,var(--a),var(--b));color:#fff;box-shadow:0 4px 20px rgba(37,99,235,.4);width:100%}
+.btn-primary:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 8px 30px rgba(37,99,235,.5)}
+.btn-primary:disabled{opacity:.6;cursor:not-allowed}
+
+.error-message{background:rgba(239,68,68,.15);border:1px solid rgba(239,68,68,.3);color:#ef4444;padding:12px 16px;border-radius:10px;font-size:.9rem;display:none;animation:shake .4s}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-8px)}75%{transform:translateX(8px)}}
+.error-message.show{display:block}
+
+.login-footer{text-align:center;margin-top:24px;color:var(--mu);font-size:.9rem}
+.login-footer a{color:var(--b);font-weight:500}
+
+@media(max-width:480px){.login-card{padding:24px}.login-header h1{font-size:1.6rem}}
+</style>
+</head>
+<body>
+<div id="particles"></div>
+<div class="blob b1"></div>
+<div class="blob b2"></div>
+
+<div class="login-card">
+<div class="login-header">
+<h1>Admin Panel</h1>
+<p>Sign in to manage your portfolio</p>
+</div>
+<form class="login-form" id="loginForm">
+<div class="form-group"><label>Email</label><input type="email" id="email" required placeholder="admin@example.com" autocomplete="email"></div>
+<div class="form-group"><label>Password</label><input type="password" id="password" required placeholder="••••••••" autocomplete="current-password"></div>
+<div class="error-message" id="errorMsg"></div>
+<button class="btn btn-primary" type="submit" id="submitBtn"><span class="btn-text">Sign In</span><span class="btn-loader" style="display:none"><svg width="20" height="20" viewBox="0 0 24 24" style="animation:spin 1s linear infinite"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="3" fill="none" stroke-dasharray="30,60" stroke-linecap="round"/></svg></span></button>
+</form>
+<div class="login-footer">
+<small>Demo: admin@demo.com / demo123 (if configured)</small>
+</div>
+</div>
+
+<script type="module">
+import { supabase } from './supabase-config.js';
+
+const particles = document.getElementById('particles');
+const canvas = document.createElement('canvas');
+const ctx = canvas.getContext('2d');
+particles.appendChild(canvas);
+let particlesArray = [];
+
+function resizeCanvas() {canvas.width = innerWidth; canvas.height = innerHeight;}
+addEventListener('resize', resizeCanvas); resizeCanvas();
+
+class Particle {
+constructor() {this.reset();}
+reset() {this.x = Math.random() * canvas.width; this.y = Math.random() * canvas.height; this.size = Math.random() * 2 + 0.5; this.speedX = (Math.random() - 0.5) * 0.3; this.speedY = (Math.random() - 0.5) * 0.3; this.opacity = Math.random() * 0.5 + 0.1; this.color = ['#2563eb', '#38bdf8', '#7dd3fc'][Math.floor(Math.random() * 3)];}
+update() {this.x += this.speedX; this.y += this.speedY; if (this.x < 0 || this.x > canvas.width || this.y < 0 || this.y > canvas.height) this.reset();}
+draw() {ctx.beginPath(); ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2); ctx.fillStyle = this.color; ctx.globalAlpha = this.opacity; ctx.fill(); ctx.globalAlpha = 1;}
+}
+
+function initParticles() {particlesArray = []; const count = Math.min(60, Math.floor((canvas.width * canvas.height) / 20000)); for (let i = 0; i < count; i++) particlesArray.push(new Particle());}
+initParticles();
+
+function animateParticles() {ctx.clearRect(0, 0, canvas.width, canvas.height); particlesArray.forEach(p => {p.update(); p.draw();}); requestAnimationFrame(animateParticles);}
+animateParticles();
+
+const form = document.getElementById('loginForm');
+const errorMsg = document.getElementById('errorMsg');
+const submitBtn = document.getElementById('submitBtn');
+const btnText = submitBtn.querySelector('.btn-text');
+const btnLoader = submitBtn.querySelector('.btn-loader');
+
+function showError(msg) {errorMsg.textContent = msg; errorMsg.classList.add('show');}
+function hideError() {errorMsg.classList.remove('show');}
+function setLoading(loading) {submitBtn.disabled = loading; btnText.style.display = loading ? 'none' : 'inline'; btnLoader.style.display = loading ? 'inline' : 'none';}
+
+const { data: { session } } = await supabase.auth.getSession();
+if (session) {window.location.href = '/admin/';}
+
+form.addEventListener('submit', async (e) => {
+e.preventDefault();
+hideError();
+setLoading(true);
+
+const email = document.getElementById('email').value.trim();
+const password = document.getElementById('password').value;
+
+const { data, error } = await supabase.auth.signInWithPassword({email, password});
+
+if (error) {
+showError(error.message);
+setLoading(false);
+return;
+}
+
+window.location.href = '/admin/';
+});
+</script>
+</body>
+</html>

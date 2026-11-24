@@ -171,13 +171,8 @@ footer::before{content:"";position:absolute;top:0;left:50%;transform:translateX(
 
 <section id="projects">
 <h2 class="rv">AI <span>Projects</span></h2>
-<div class="grid">
-<div class="card rv"><h3>K.D Kangen Water Website</h3><p><b>Problem:</b> Brand needed a modern online presence.<br><b>Outcome:</b> Multi-page animated website built with AI-assisted coding.</p>
-<div class="chips"><i>React</i><i>Node.js</i><i>AI Agent</i></div><p class="lnk" style="margin-top:12px"><a target="_blank" rel="noopener" href="https://github.com/kamalsheokand615-debug">GitHub ↗</a><a target="_blank" rel="noopener" href="https://kd-kangen-water.vercel.app/">Live demo ↗</a></p></div>
-<div class="card rv"><h3>AI Tools Report (PDF)</h3><p><b>Problem:</b> People find AI tools confusing.<br><b>Outcome:</b> Easy Hinglish guide covering ChatGPT, Gemini, Suno, Kling, ElevenLabs and more.</p>
-<div class="chips"><i>ChatGPT</i><i>Research</i><i>Content</i></div></div>
-<div class="card rv"><h3>AI Video Campaign</h3><p><b>Problem:</b> Video ads are slow and costly.<br><b>Outcome:</b> Short promo videos made with AI voice, music and video tools. (Add your result here)</p>
-<div class="chips"><i>Kling</i><i>ElevenLabs</i><i>Suno</i></div></div>
+<div class="grid" id="projectsGrid">
+<!-- Projects loaded from Supabase -->
 </div>
 </section>
 
@@ -350,6 +345,49 @@ document.getElementById("cf").addEventListener("submit",e=>{e.preventDefault();c
 const body="Name: "+v("n")+"\nEmail: "+v("e")+"\n\n"+v("m");
 const sub=encodeURIComponent(v("s")||"Portfolio enquiry from "+v("n")),bd=encodeURIComponent(body);const w=window.open("https://mail.google.com/mail/?view=cm&fs=1&to="+TO+"&su="+sub+"&body="+bd,"_blank");if(!w)window.location.href="mailto:"+TO+"?subject="+sub+"&body="+bd;
 document.getElementById("st").textContent="Gmail is opening in a new tab… just press send there.";setTimeout(fill,300)});
+
+const SUPABASE_URL = 'https://zmzaagojbcdzrpmakddf.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InptemFhZ29qYmNkenJwbWFrZGRmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTU0OTE3NDksImV4cCI6MjExMTA2Nzc0OX0.88AW5A6ClEvFz4pDlR6y-ll6CUaOvBNftvJ4Ub-ytVE';
+
+async function loadProjects() {
+try {
+const res = await fetch(`${SUPABASE_URL}/rest/v1/projects?select=*&status=eq.published&order=sort_order.asc`, {
+headers: {'apikey': SUPABASE_ANON_KEY, 'Authorization': `Bearer ${SUPABASE_ANON_KEY}`}
+});
+const projects = await res.json();
+renderProjects(projects);
+} catch (err) {console.error('Failed to load projects:', err);}
+}
+
+function renderProjects(projects) {
+const grid = document.getElementById('projectsGrid');
+if (!grid) return;
+if (!projects || projects.length === 0) {
+grid.innerHTML = '<div class="empty-state" style="grid-column:1/-1;text-align:center;padding:60px 20px;color:var(--mu)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="width:64px;height:64px;margin-bottom:16px;opacity:.5"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 9h6"/><path d="M9 13h4"/></svg><h3>No projects yet</h3><p>Add projects from the admin panel</p></div>';
+return;
+}
+grid.innerHTML = projects.map(p => `
+<div class="card rv" style="opacity:0;animation:cardStagger .6s cubic-bezier(.2,.8,.2,1) forwards ${projects.indexOf(p) * 0.1}s">
+${p.thumbnail_url ? `<img src="${p.thumbnail_url}" alt="${p.title}" style="width:100%;height:160px;object-fit:cover;border-radius:12px 12px 0 0;margin:-24px -24px 20px -24px;">` : ''}
+<h3>${p.title}</h3>
+${p.problem ? `<p><b>Problem:</b> ${p.problem}</p>` : ''}
+${p.outcome ? `<p><b>Outcome:</b> ${p.outcome}</p>` : ''}
+${p.description ? `<p>${p.description}</p>` : ''}
+<div class="chips">${(p.technologies || []).map(t => `<i>${t}</i>`).join('')}</div>
+<div class="lnk" style="margin-top:12px">
+${p.github_url ? `<a target="_blank" rel="noopener" href="${p.github_url}">GitHub ↗</a>` : ''}
+${p.demo_url ? `<a target="_blank" rel="noopener" href="${p.demo_url}">Live demo ↗</a>` : ''}
+</div>
+</div>
+`).join('');
+
+grid.querySelectorAll('.card').forEach((card, i) => {
+card.style.transitionDelay = (i * 0.14) + 's';
+card.addEventListener('transitionend', () => card.style.transitionDelay = '', {once: true});
+});
+}
+
+document.addEventListener('DOMContentLoaded', loadProjects);
 </script>
 </body>
 </html>

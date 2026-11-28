@@ -47,6 +47,8 @@ Create `admin-app/.env` first (it is git-ignored), using the URL and anon key fr
 ```
 VITE_SUPABASE_URL=https://your-project.supabase.co
 VITE_SUPABASE_ANON_KEY=your-anon-key
+# Optional: full URL of the deployed portfolio for the "View portfolio" link
+VITE_PORTFOLIO_URL=https://your-portfolio-domain/
 ```
 
 Then build:
@@ -79,6 +81,11 @@ Add these Environment Variables in Vercel → Project Settings → Environment V
 ```
 VITE_SUPABASE_URL=https://your-project.supabase.co
 VITE_SUPABASE_ANON_KEY=your-anon-key
+# Optional but recommended: portfolio site URL for the "View portfolio" link.
+# Without it the link resolves to /portfolio/ on the admin domain and will 404.
+VITE_PORTFOLIO_URL=https://your-portfolio-domain/
 ```
 
 This deploys the admin panel at the domain root. The public portfolio is a separate static site: deploy it with Root Directory `portfolio` (or `portfolio-zip`), Framework Preset "Other"/static, no build command and no output directory override.
+
+Also set Supabase → Authentication → URL Configuration → **Site URL** to the deployed admin URL (e.g. `https://your-admin.vercel.app/`) and add that URL to **Redirect URLs**, so email confirmation and sign-in links return to the admin panel.

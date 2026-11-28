@@ -2,6 +2,9 @@ import React, { useEffect, useState, useCallback } from 'react'
 import { supabase } from '../lib/supabase'
 import './admin.css'
 
+// Local static server: ../portfolio/. On Vercel set VITE_PORTFOLIO_URL to the portfolio site URL.
+const PORTFOLIO_URL = import.meta.env.VITE_PORTFOLIO_URL || '../portfolio/'
+
 // ---- Har section ki config: yahan se form aur list apne aap bante hain ----
 const SECTIONS = {
   skills: {
@@ -326,7 +329,7 @@ export default function Admin() {
       <aside className={open ? 'open' : ''}>
         <div className="brand">Portfolio Admin</div>
         <nav>{NAV.map(([k, l]) => <button key={k} className={page === k ? 'on' : ''} onClick={() => go(k)}>{l}</button>)}</nav>
-        <a className="out" href="../portfolio/" target="_blank" rel="noopener">View portfolio ↗</a>
+        <a className="out" href={PORTFOLIO_URL} target="_blank" rel="noopener">View portfolio ↗</a>
         <button className="out" onClick={() => supabase.auth.signOut()}>Sign out</button>
       </aside>
       {open && <div className="scrim" onClick={() => setOpen(false)} />}

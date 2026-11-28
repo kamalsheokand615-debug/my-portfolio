@@ -6,6 +6,7 @@ Static portfolio (original design/animations unchanged) supported by a Supabase-
 
 With the HTTP server running on port 8000:
 
+- Site root: `http://localhost:8000/` redirects to the portfolio
 - Portfolio: `http://localhost:8000/portfolio/`
 - Zip version: `http://localhost:8000/portfolio-zip/`
 - Admin panel: `http://localhost:8000/admin/`
@@ -31,6 +32,7 @@ Each portfolio route keeps its own title, description, Open Graph and Twitter ta
 
 ## Files
 
+- `index.html` — root page that redirects visitors to `/portfolio/`
 - `portfolio/index.html`, `portfolio-zip/index.html` — portfolio pages
 - `portfolio/admin-data.js` — shared Supabase data layer for both pages
 - `admin-app/` — React admin source built from `portfolio-admin-kit.zip` (`Admin.jsx`, `admin.css`, `usePortfolio.js` pattern)

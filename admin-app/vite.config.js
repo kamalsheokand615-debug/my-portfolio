@@ -1,9 +1,11 @@
 import { defineConfig } from 'vite'
 
-export default defineConfig({
-  base: './',
+// Vercel build (npm run build) -> admin-app/dist
+// Local static-server build (npm run build:admin) -> ../admin
+export default defineConfig(({ mode }) => ({
+  base: mode === 'admin' ? './' : '/',
   build: {
-    outDir: '../admin',
+    outDir: mode === 'admin' ? '../admin' : 'dist',
     emptyOutDir: true,
   },
-})
+}))

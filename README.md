@@ -54,7 +54,31 @@ Then build:
 ```bash
 cd admin-app
 npm install
-npm run build
+npm run build          # Vercel output: admin-app/dist
+npm run build:admin    # local static-server output: ../admin/
 ```
 
-The build writes straight into `admin/`. Both portfolio pages load the same `admin-data.js`; `portfolio-zip/` keeps its own copy so the folder stays self-contained.
+`dist/` is git-ignored; `admin/` is the built output served at `/admin/` by the local HTTP server. Both portfolio pages load the same `admin-data.js`; `portfolio-zip/` keeps its own copy so the folder stays self-contained.
+
+## Deploy the React admin to Vercel
+
+The Vite/React app lives in `admin-app/` (the repository root has only a redirect `index.html` and no `package.json`), so Vercel must be pointed at that subfolder. `admin-app/vercel.json` contains the SPA rewrite to `/index.html`.
+
+Vercel project settings:
+
+| Setting | Value |
+| --- | --- |
+| Root Directory | `admin-app` |
+| Framework Preset | Vite |
+| Install Command | `npm install` |
+| Build Command | `npm run build` |
+| Output Directory | `dist` |
+
+Add these Environment Variables in Vercel → Project Settings → Environment Variables (Production, Preview and Development), using the values from Supabase → Project Settings → API. They are read at **build time**, so redeploy after adding/changing them:
+
+```
+VITE_SUPABASE_URL=https://your-project.supabase.co
+VITE_SUPABASE_ANON_KEY=your-anon-key
+```
+
+This deploys the admin panel at the domain root. The public portfolio is a separate static site: deploy it with Root Directory `portfolio` (or `portfolio-zip`), Framework Preset "Other"/static, no build command and no output directory override.

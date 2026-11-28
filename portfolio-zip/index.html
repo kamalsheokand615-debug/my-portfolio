@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Kamaldeep | Digital Marketing with AI</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#01030a;--card:rgba(120,190,255,.06);--bd:rgba(125,200,255,.16);--tx:#eef6ff;--mu:#9db6d4;--a:#2563eb;--b:#38bdf8;--c:#7dd3fc;color-scheme:dark;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+
+
+html{scroll-behavior:smooth;scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box;margin:0}
+body{background:#0a0a0d;position:relative;color:var(--tx);font-family:Inter,system-ui,sans-serif;line-height:1.6;overflow-x:hidden}
+h1,h2,h3{font-family:'Space Grotesk',system-ui,sans-serif;line-height:1.15}
+.bg{position:absolute;top:0;left:0;width:100%;z-index:-1;pointer-events:none;overflow:hidden}.bg svg{display:block;width:100%;height:auto}.bg svg:nth-child(even){transform:scaleY(-1)}
+.blob{position:fixed;border-radius:50%;filter:blur(90px);opacity:.35;z-index:-1;animation:float 14s ease-in-out infinite}
+.b1{width:420px;height:420px;background:var(--a);top:-100px;left:-100px}
+.b2{width:380px;height:380px;background:#1d4ed8;bottom:-80px;right:-80px;animation-delay:-5s}
+.b3{width:300px;height:300px;background:#2563eb;top:45%;left:55%;animation-delay:-9s;opacity:.2}
+@keyframes float{50%{transform:translate(60px,40px) scale(1.15)}}
+nav{position:sticky;top:env(safe-area-inset-top,0px);z-index:10;display:flex;justify-content:space-between;align-items:center;padding:14px 5vw;backdrop-filter:blur(14px);background:color-mix(in srgb,var(--bg) 60%,transparent)}
+nav b{font-family:'Space Grotesk';font-size:1.2rem}
+nav div{display:flex;gap:20px;font-size:.9rem;overflow-x:auto}
+nav a{color:var(--mu);text-decoration:none;white-space:nowrap}nav a:hover{color:var(--tx)}
+section{max-width:1050px;margin:auto;padding:80px 5vw}
+.hero{min-height:88vh;display:grid;grid-template-columns:1.3fr 1fr;gap:40px;align-items:center}
+.tag{display:inline-block;padding:6px 14px;border:1px solid var(--bd);border-radius:99px;background:var(--card);font-size:.85rem;color:var(--mu)}
+h1{font-size:clamp(2.4rem,6vw,4.4rem);margin:18px 0}
+.grad{background:linear-gradient(90deg,var(--a),var(--b),var(--c),var(--a));background-size:300% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:shine 6s linear infinite}
+@keyframes shine{to{background-position:300% 0}}
+.type{color:var(--b);font-weight:600;min-height:1.6em}
+.type::after{content:"|";animation:blink 1s infinite}@keyframes blink{50%{opacity:0}}
+.hero p{color:var(--mu);max-width:520px;margin:14px 0 26px}
+.btn{display:inline-block;padding:13px 26px;border-radius:12px;font-weight:600;text-decoration:none;margin:0 10px 10px 0;transition:.25s}
+.pri{background:linear-gradient(135deg,var(--a),var(--b));color:#fff;box-shadow:0 8px 30px rgba(37,99,235,.5)}
+.pri:hover{transform:translateY(-3px) scale(1.03)}
+.sec{border:1px solid var(--bd);color:var(--tx);background:var(--card)}.sec:hover{transform:translateY(-3px)}
+.avatar{position:relative;width:min(280px,70vw);aspect-ratio:1;margin:auto;border-radius:50%;display:grid;place-items:center;font:700 5rem 'Space Grotesk';background:var(--card);border:1px solid var(--bd)}
+.avatar::before{content:"";position:absolute;inset:-8px;border-radius:50%;background:conic-gradient(var(--a),var(--b),var(--c),var(--a));z-index:-1;animation:spin 8s linear infinite}
+.avatar::after{content:"";position:absolute;inset:0;border-radius:50%;background:var(--bg);z-index:-1}
+@keyframes spin{to{transform:rotate(360deg)}}
+h2{font-size:clamp(1.8rem,4vw,2.6rem);margin-bottom:34px}
+h2 span{color:var(--a)}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:16px}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:18px;padding:24px;backdrop-filter:blur(10px);transition:transform .3s,border-color .3s}
+.card:hover{transform:translateY(-6px);border-color:var(--a)}
+.stat b{display:block;font:700 2.4rem 'Space Grotesk'}
+.stat span{color:var(--mu);font-size:.9rem}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:18px}
+.card h3{margin-bottom:10px;font-size:1.2rem}
+.card p{color:var(--mu);font-size:.95rem}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.chips i{font-style:normal;font-size:.8rem;padding:5px 11px;border-radius:99px;background:color-mix(in srgb,var(--a) 18%,transparent);border:1px solid var(--bd)}
+.bar{height:8px;border-radius:9px;background:var(--bd);margin:6px 0 16px;overflow:hidden}
+.bar div{height:100%;width:0;background:linear-gradient(90deg,var(--a),var(--b));border-radius:9px;transition:width 1.4s cubic-bezier(.2,.8,.2,1)}
+.skl{display:flex;justify-content:space-between;font-size:.9rem}
+.lnk a{color:var(--b);text-decoration:none;font-size:.9rem;margin-right:14px}
+.cta{text-align:center}
+.cta .card{padding:50px 24px}
+.cta h2{margin-bottom:12px}
+form input,form textarea{width:100%;padding:13px 15px;margin-bottom:14px;border-radius:12px;border:1px solid var(--bd);background:rgba(255,255,255,.05);color:var(--tx);font:inherit;outline:none;transition:.25s}
+form input:focus,form textarea:focus{border-color:var(--b);box-shadow:0 0 0 3px rgba(56,189,248,.2)}
+form textarea{min-height:130px;resize:vertical}
+form label{display:block;font-size:.85rem;color:var(--mu);margin-bottom:6px}
+.fr{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media(max-width:600px){.fr{grid-template-columns:1fr}}
+#st{margin-top:12px;font-size:.9rem;color:var(--b);min-height:1.4em}
+.ci{display:flex;gap:16px;align-items:center;text-decoration:none;color:var(--tx)}.ci span{flex:none;font-size:1.5rem;width:52px;height:52px;display:grid;place-items:center;border-radius:14px;background:linear-gradient(135deg,var(--a),var(--b))}.ci small{display:block;color:var(--mu);font-size:.8rem}.ci b{font-family:'Space Grotesk';word-break:break-all}
+#pg{position:fixed;top:0;left:0;height:3px;width:0;background:linear-gradient(90deg,var(--a),var(--b));z-index:50;box-shadow:0 0 10px var(--b)}
+#cur{position:fixed;left:0;top:0;width:320px;height:320px;border-radius:50%;pointer-events:none;z-index:1;background:radial-gradient(circle,rgba(56,189,248,.16),transparent 65%);transform:translate(-999px,-999px)}
+.pri{position:relative;overflow:hidden}
+.pri::after{content:"";position:absolute;top:0;left:-120%;width:60%;height:100%;background:linear-gradient(100deg,transparent,rgba(255,255,255,.35),transparent);transform:skewX(-20deg);animation:sh 3.5s infinite}
+@keyframes sh{to{left:140%}}
+.avatar{animation:fl 5s ease-in-out infinite}
+@keyframes fl{50%{transform:translateY(-14px)}}
+.tag{animation:pu 3s infinite}
+@keyframes pu{50%{box-shadow:0 0 18px rgba(56,189,248,.5)}}
+h2::after{content:"";display:block;height:3px;width:0;margin-top:10px;border-radius:3px;background:linear-gradient(90deg,var(--a),var(--b));transition:width 1s .3s}
+h2.in::after{width:90px}
+nav a{position:relative}
+nav a::after{content:"";position:absolute;left:0;bottom:-4px;height:2px;width:0;background:var(--b);transition:width .3s}
+nav a:hover::after{width:100%}
+.chips i{transition:.25s}
+.chips i:hover{transform:translateY(-3px) scale(1.08);background:var(--a)}
+.card:hover{box-shadow:0 12px 40px rgba(37,99,235,.28)}
+footer{text-align:center;color:var(--mu);padding:30px;font-size:.85rem}
+.rv{opacity:0;transform:translateY(34px);transition:opacity .8s,transform .8s}.rv.in{opacity:1;transform:none}
+@media(max-width:760px){.hero{grid-template-columns:1fr;text-align:center}.hero p{margin-inline:auto}.avatar{order:-1;font-size:3.6rem}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.rv{opacity:1;transform:none}}
+</style>
+</head>
+<body>
+<div id="pg"></div><div id="cur"></div><div class="bg"><svg viewBox="0 0 626 372" preserveAspectRatio="xMidYMid meet" aria-hidden="true"><defs><radialGradient id="g" cx="45%" cy="40%" r="75%"><stop offset="0" stop-color="#222226"/><stop offset="1" stop-color="#08080a"/></radialGradient></defs><rect width="626" height="372" fill="url(#g)" style="filter:none"/><polygon points="365,0 626,0 626,175" fill="#0b0b0e" opacity=".9"/><polygon points="0,175 0,372 215,372" fill="#0b0b0e" opacity=".9"/></svg></div>
+<nav><b class="grad">Kamaldeep</b><div><a href="#about">About</a><a href="#skills">Skills</a><a href="#projects">Projects</a><a href="#certs">Certificates</a><a href="#blog">Blog</a><a href="#contact">Contact</a><a href="../admin/">Admin</a></div></nav>
+
+<section class="hero" id="top">
+<div class="rv">
+<span class="tag">✦ Open for work &amp; collaborations</span>
+<h1>Hi, I’m <span class="grad">Kamaldeep</span></h1>
+<div class="type" id="type"></div>
+<p>I mix digital marketing with the power of AI to build smarter content, better SEO and campaigns that actually get noticed. I’m always learning new AI tools and turning them into real results for brands.</p>
+<a class="btn pri" href="#projects">View my work</a>
+<a class="btn sec" target="_blank" rel="noopener" href="https://mail.google.com/mail/?view=cm&amp;fs=1&amp;to=kamalsheokand615@gmail.com&amp;su=Resume%20request">✉ Request Resume</a>
+</div>
+<div class="avatar rv">KD</div>
+</section>
+
+<section id="about">
+<h2 class="rv">About <span>me</span></h2>
+<div class="stats">
+<div class="card stat rv"><b data-n="10">0</b><span>AI tools mastered</span></div>
+<div class="card stat rv"><b data-n="3">0</b><span>Core skills</span></div>
+<div class="card stat rv"><b data-n="5">0</b><span>Projects built</span></div>
+<div class="card stat rv"><b data-n="100" data-s="%">0</b><span>Passion for learning</span></div>
+</div>
+</section>
+
+<section id="skills">
+<h2 class="rv">Skills &amp; <span>Tools</span></h2>
+<div class="grid">
+<div class="card rv"><h3>Core skills</h3>
+<div class="skl"><span>Digital Marketing with AI</span><span>90%</span></div><div class="bar"><div data-w="90"></div></div>
+<div class="skl"><span>SEO</span><span>85%</span></div><div class="bar"><div data-w="85"></div></div>
+<div class="skl"><span>Video Editing</span><span>88%</span></div><div class="bar"><div data-w="88"></div></div></div>
+<div class="card rv"><h3>AI &amp; Generative tools</h3><p>The tools I use to create content faster and smarter.</p>
+<div class="chips"><i>ChatGPT</i><i>Gemini</i><i>Google AI Studio</i><i>Suno</i><i>Flow</i><i>Kling</i><i>ElevenLabs</i><i>Prompt Engineering</i></div></div>
+<div class="card rv"><h3>Marketing toolkit</h3><p>Everything needed to grow a brand online.</p>
+<div class="chips"><i>SEO</i><i>Content Strategy</i><i>Social Media</i><i>Reels &amp; Shorts</i><i>Video Editing</i><i>Analytics</i></div></div>
+</div>
+</section>
+
+<section id="projects">
+<h2 class="rv">AI <span>Projects</span></h2>
+<div class="grid">
+<div class="card rv"><h3>K.D Kangen Water Website</h3><p><b>Problem:</b> Brand needed a modern online presence.<br><b>Outcome:</b> Multi-page animated website built with AI-assisted coding.</p>
+<div class="chips"><i>React</i><i>Node.js</i><i>AI Agent</i></div><p class="lnk" style="margin-top:12px"><a target="_blank" rel="noopener" href="https://github.com/kamalsheokand615-debug">GitHub ↗</a><a target="_blank" rel="noopener" href="https://kd-kangen-water.vercel.app/">Live demo ↗</a></p></div>
+<div class="card rv"><h3>AI Tools Report (PDF)</h3><p><b>Problem:</b> People find AI tools confusing.<br><b>Outcome:</b> Easy Hinglish guide covering ChatGPT, Gemini, Suno, Kling, ElevenLabs and more.</p>
+<div class="chips"><i>ChatGPT</i><i>Research</i><i>Content</i></div></div>
+<div class="card rv"><h3>AI Video Campaign</h3><p><b>Problem:</b> Video ads are slow and costly.<br><b>Outcome:</b> Short promo videos made with AI voice, music and video tools. (Add your result here)</p>
+<div class="chips"><i>Kling</i><i>ElevenLabs</i><i>Suno</i></div></div>
+</div>
+</section>
+
+<section id="certs">
+<h2 class="rv">Certifications &amp; <span>Courses</span></h2>
+<div class="grid">
+<div class="card rv"><h3>Digital Marketing with AI</h3><p>Add platform name and issue date.</p><p class="lnk"><a target="_blank" rel="noopener" href="https://www.linkedin.com/in/kamal-sheokand-615-">View on LinkedIn ↗</a></p></div>
+<div class="card rv"><h3>SEO Fundamentals</h3><p>Add platform (Google, Coursera…).</p><p class="lnk"><a target="_blank" rel="noopener" href="https://www.linkedin.com/in/kamal-sheokand-615-">View on LinkedIn ↗</a></p></div>
+<div class="card rv"><h3>Generative AI Basics</h3><p>Add platform (Google, DeepLearning.AI…).</p><p class="lnk"><a target="_blank" rel="noopener" href="https://www.linkedin.com/in/kamal-sheokand-615-">View on LinkedIn ↗</a></p></div>
+</div>
+</section>
+
+<section id="profiles">
+<h2 class="rv">Profiles &amp; <span>Challenges</span></h2>
+<div class="grid">
+<div class="card rv"><h3>GitHub</h3><p>Active repositories and consistent commits.</p><p class="lnk"><a target="_blank" rel="noopener" href="https://github.com/kamalsheokand615-debug">Open profile ↗</a></p></div>
+</div>
+</section>
+
+<section id="blog">
+<h2 class="rv">Blog &amp; <span>Writing</span></h2>
+<div class="grid">
+<div class="card rv"><h3>How I use AI for SEO</h3><p>Short walkthrough of my content workflow.</p><p class="lnk"><a target="_blank" rel="noopener" href="https://www.linkedin.com/in/kamal-sheokand-615-">Read on LinkedIn ↗</a></p></div>
+<div class="card rv"><h3>Top AI tools for marketers</h3><p>My favourite tools and why they work.</p><p class="lnk"><a target="_blank" rel="noopener" href="https://www.linkedin.com/in/kamal-sheokand-615-">Read on LinkedIn ↗</a></p></div>
+</div>
+</section>
+
+<section id="contact" class="cta">
+<div class="card rv"><h2>Let’s <span class="grad">work together</span></h2>
+<p style="margin-bottom:24px">Have a project or an idea? Let’s grow your brand with AI.</p>
+<a class="btn pri" target="_blank" rel="noopener" href="https://mail.google.com/mail/?view=cm&amp;fs=1&amp;to=kamalsheokand615@gmail.com&amp;su=Hello%20Kamaldeep">✉ Email me</a>
+<a class="btn pri" target="_blank" rel="noopener" href="https://www.linkedin.com/in/kamal-sheokand-615-">LinkedIn</a><a class="btn pri" target="_blank" rel="noopener" href="https://github.com/kamalsheokand615-debug">GitHub</a></div>
+<form class="card rv" id="cf" style="margin-top:20px;text-align:left">
+<h3 style="margin-bottom:18px">Send me a message</h3>
+<div class="fr"><div><label for="n">Your name</label><input id="n" required placeholder="Your name"></div>
+<div><label for="e">Your email</label><input id="e" type="email" required placeholder="you@example.com"></div></div>
+<label for="s">Subject</label><input id="s" placeholder="What’s this about?">
+<label for="m">Message</label><textarea id="m" required placeholder="Tell me about your project or idea…"></textarea>
+<button class="btn pri" type="submit" style="border:0;cursor:pointer;font:inherit;font-weight:600">Send message ➤</button>
+<div id="st" aria-live="polite"></div>
+</form>
+</section>
+<footer>© 2026 Kamaldeep · Digital Marketing with AI</footer>
+
+<script>
+let words=["Digital Marketer with AI","SEO Specialist","Video Editor","AI Content Creator"];
+let w=0,c=0,d=false;const el=document.getElementById("type");
+window.setTypeWords=(a)=>{if(Array.isArray(a)&&a.length){words=a;w=0;c=0;d=false}};
+(function t(){const s=words[w];el.textContent=s.slice(0,c);
+if(!d&&c<s.length){c++;setTimeout(t,80)}else if(!d){d=true;setTimeout(t,1300)}
+else if(c>0){c--;setTimeout(t,40)}else{d=false;w=(w+1)%words.length;setTimeout(t,300)}})();
+const io=new IntersectionObserver(es=>es.forEach(e=>{if(!e.isIntersecting)return;
+const x=e.target;x.classList.add("in");
+x.querySelectorAll("[data-w]").forEach(b=>b.style.width=b.dataset.w+"%");
+x.querySelectorAll("[data-n]").forEach(n=>{const T=+n.dataset.n,s=n.dataset.s||"+";let i=0;
+const k=setInterval(()=>{i+=Math.max(1,T/40);if(i>=T){i=T;clearInterval(k)}n.textContent=Math.round(i)+s},35)});
+io.unobserve(x)}),{threshold:.15});
+window.__portfolioIO=io;
+document.querySelectorAll(".rv").forEach(x=>io.observe(x));
+function fill(){const b=document.querySelector(".bg"),s=b.querySelector("svg");b.querySelectorAll("svg:not(:first-child)").forEach(x=>x.remove());const h=b.clientWidth*372/626;const n=Math.ceil(document.documentElement.scrollHeight/h);for(let i=1;i<n;i++)b.appendChild(s.cloneNode(true))}
+addEventListener("load",fill);addEventListener("resize",fill);setTimeout(fill,600);
+const pg=document.getElementById("pg"),cur=document.getElementById("cur");
+addEventListener("scroll",()=>{const h=document.documentElement;pg.style.width=(h.scrollTop/Math.max(1,h.scrollHeight-h.clientHeight)*100)+"%"},{passive:true});
+document.querySelectorAll(".grid,.stats").forEach(g=>[...g.children].forEach((c,i)=>{c.style.transitionDelay=i*.14+"s";c.addEventListener("transitionend",()=>c.style.transitionDelay="",{once:true})}));
+if(matchMedia("(hover:hover) and (prefers-reduced-motion:no-preference)").matches){
+addEventListener("pointermove",e=>{cur.style.transform="translate("+(e.clientX-160)+"px,"+(e.clientY-160)+"px)"});
+document.querySelectorAll(".card").forEach(c=>{c.addEventListener("mousemove",e=>{const r=c.getBoundingClientRect(),x=(e.clientX-r.left)/r.width-.5,y=(e.clientY-r.top)/r.height-.5;c.style.transition="transform .12s,border-color .3s";c.style.transform="perspective(700px) rotateX("+(-y*8)+"deg) rotateY("+(x*8)+"deg) translateY(-6px)"});
+c.addEventListener("mouseleave",()=>{c.style.transition="transform .4s,border-color .3s";c.style.transform=""})})}
+// Contact form ab ./admin-data.js handle karta hai.
+
+</script>
+<script src="./admin-data.js"></script>
+</body>
+</html>

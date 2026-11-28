@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Admin Panel - Kamaldeep Portfolio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0a0a0d;--card:rgba(120,190,255,.06);--bd:rgba(125,200,255,.16);--tx:#eef6ff;--mu:#9db6d4;--a:#2563eb;--b:#38bdf8;--c:#7dd3fc;--success:#22c55e;--error:#ef4444;--warning:#f59e0b;color-scheme:dark}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{background:#0a0a0d;color:var(--tx);font-family:Inter,system-ui,sans-serif;line-height:1.6}
+h1,h2,h3,h4{font-family:'Space Grotesk',system-ui,sans-serif;line-height:1.2}
+a{color:var(--b);text-decoration:none}
+a:hover{color:var(--c)}
+
+.admin-layout{display:grid;grid-template-columns:260px 1fr;min-height:100vh}
+.sidebar{background:var(--card);border-right:1px solid var(--bd);padding:24px 16px;display:flex;flex-direction:column;position:sticky;top:0;height:100vh;overflow-y:auto}
+.sidebar-header{padding:0 8px 24px;border-bottom:1px solid var(--bd);margin-bottom:24px}
+.sidebar-header h1{font-size:1.3rem;background:linear-gradient(90deg,var(--a),var(--b),var(--c));-webkit-background-clip:text;background-clip:text;color:transparent}
+.sidebar-nav{display:flex;flex-direction:column;gap:4px}
+.nav-item{display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:10px;color:var(--mu);font-weight:500;transition:.2s;cursor:pointer}
+.nav-item:hover,.nav-item.active{background:rgba(37,99,235,.15);color:var(--tx);border-color:var(--a)}
+.nav-item svg{width:20px;height:20px;flex-shrink:0}
+
+.main-content{padding:32px 40px;overflow-y:auto}
+.header{display:flex;justify-content:space-between;align-items:center;margin-bottom:32px;flex-wrap:wrap;gap:16px}
+.header h2{font-size:1.8rem}
+.header-actions{display:flex;gap:12px}
+
+.btn{display:inline-flex;align-items:center;gap:8px;padding:12px 24px;border-radius:10px;font-weight:600;font-size:.9rem;cursor:pointer;transition:.2s;border:none;font-family:inherit}
+.btn-primary{background:linear-gradient(135deg,var(--a),var(--b));color:#fff;box-shadow:0 4px 20px rgba(37,99,235,.4)}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 8px 30px rgba(37,99,235,.5)}
+.btn-secondary{background:var(--card);border:1px solid var(--bd);color:var(--tx)}
+.btn-secondary:hover{border-color:var(--a);transform:translateY(-2px)}
+.btn-danger{background:rgba(239,68,68,.15);border:1px solid rgba(239,68,68,.3);color:var(--error)}
+.btn-danger:hover{background:rgba(239,68,68,.25);border-color:var(--error)}
+.btn-sm{padding:8px 16px;font-size:.8rem}
+.btn-icon{padding:10px}
+
+.card{background:var(--card);border:1px solid var(--bd);border-radius:16px;overflow:hidden;transition:border-color .3s,box-shadow .3s}
+.card:hover{border-color:rgba(56,189,248,.3);box-shadow:0 12px 40px rgba(37,99,235,.15)}
+
+.table-container{overflow-x:auto}
+table{width:100%;border-collapse:collapse}
+th,td{padding:16px;text-align:left;border-bottom:1px solid var(--bd)}
+th{font-weight:600;color:var(--mu);font-size:.8rem;text-transform:uppercase;letter-spacing:.05em;background:rgba(37,99,235,.05)}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:rgba(37,99,235,.03)}
+
+.project-thumb{width:60px;height:40px;border-radius:8px;object-fit:cover;background:var(--bd)}
+.project-title{font-weight:600}
+.project-tech{display:flex;flex-wrap:wrap;gap:6px}
+.tech-tag{font-size:.7rem;padding:3px 8px;border-radius:99px;background:rgba(37,99,235,.2);color:var(--b);border:1px solid var(--bd)}
+.status{display:inline-flex;align-items:center;gap:6px;padding:4px 12px;border-radius:99px;font-size:.75rem;font-weight:600}
+.status-published{background:rgba(34,197,94,.15);color:var(--success);border:1px solid rgba(34,197,94,.3)}
+.status-draft{background:rgba(245,158,11,.15);color:var(--warning);border:1px solid rgba(245,158,11,.3)}
+.action-btns{display:flex;gap:8px}
+
+.modal-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.7);z-index:100;display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;visibility:hidden;transition:.3s;backdrop-filter:blur(4px)}
+.modal-overlay.open{opacity:1;visibility:visible}
+.modal{background:var(--card);border:1px solid var(--bd);border-radius:16px;width:100%;max-width:700px;max-height:90vh;overflow-y:auto;transform:scale(.95);transition:.3s}
+.modal-overlay.open .modal{transform:scale(1)}
+.modal-header{display:flex;justify-content:space-between;align-items:center;padding:20px 24px;border-bottom:1px solid var(--bd)}
+.modal-header h3{font-size:1.3rem}
+.modal-close{width:36px;height:36px;border-radius:50%;background:var(--bd);border:none;color:var(--mu);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:.2s}
+.modal-close:hover{background:var(--error);color:#fff}
+.modal-body{padding:24px}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+@media(max-width:700px){.form-grid{grid-template-columns:1fr}}
+.form-group{display:flex;flex-direction:column;gap:8px}
+.form-group.full-width{grid-column:1/-1}
+label{font-size:.85rem;color:var(--mu);font-weight:500}
+input,textarea,select{padding:12px 14px;border-radius:10px;border:1px solid var(--bd);background:rgba(255,255,255,.05);color:var(--tx);font:inherit;transition:.2s;width:100%}
+input:focus,textarea:focus,select:focus{outline:none;border-color:var(--b);box-shadow:0 0 0 3px rgba(56,189,248,.2)}
+textarea{min-height:120px;resize:vertical}
+.modal-footer{display:flex;justify-content:flex-end;gap:12px;padding:20px 24px;border-top:1px solid var(--bd)}
+
+.login-container{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px}
+.login-card{width:100%;max-width:420px}
+.login-header{text-align:center;margin-bottom:32px}
+.login-header h1{font-size:2rem;background:linear-gradient(90deg,var(--a),var(--b),var(--c));-webkit-background-clip:text;background-clip:text;color:transparent}
+.login-header p{color:var(--mu);margin-top:8px}
+.login-form{display:flex;flex-direction:column;gap:20px}
+.login-btn{margin-top:8px}
+.error-toast{position:fixed;bottom:24px;right:24px;background:var(--error);color:#fff;padding:14px 20px;border-radius:10px;box-shadow:0 8px 30px rgba(239,68,68,.4);z-index:200;animation:slideIn .3s;max-width:360px}
+@keyframes slideIn{from{transform:translateX(100%);opacity:0}to{transform:none;opacity:1}}
+.success-toast{background:var(--success);box-shadow:0 8px 30px rgba(34,197,94,.4)}
+
+.stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:16px;margin-bottom:32px}
+.stat-card{padding:24px;text-align:center}
+.stat-value{font:700 2.5rem 'Space Grotesk';background:linear-gradient(135deg,var(--a),var(--b));-webkit-background-clip:text;background-clip:text;color:transparent}
+.stat-label{color:var(--mu);font-size:.9rem;margin-top:4px}
+
+.empty-state{text-align:center;padding:60px 20px;color:var(--mu)}
+.empty-state svg{width:64px;height:64px;margin-bottom:16px;opacity:.5}
+
+@media(max-width:900px){
+.admin-layout{grid-template-columns:1fr}
+.sidebar{position:fixed;left:-280px;top:0;bottom:0;z-index:50;transition:left .3s}
+.sidebar.open{left:0}
+.sidebar-overlay{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.5);z-index:40}
+.sidebar-overlay.open{display:block}
+.mobile-menu-btn{display:flex;position:fixed;top:16px;left:16px;z-index:60;width:44px;height:44px;border-radius:10px;background:var(--card);border:1px solid var(--bd);align-items:center;justify-content:center;cursor:pointer}
+}
+@media(min-width:901px){.mobile-menu-btn{display:none}}
+</style>
+</head>
+<body>
+<div class="sidebar-overlay" id="sidebarOverlay"></div>
+<button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Open menu">
+<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+</button>
+
+<div class="admin-layout">
+<aside class="sidebar" id="sidebar">
+<div class="sidebar-header">
+<h1>Admin Panel</h1>
+</div>
+<nav class="sidebar-nav">
+<button class="nav-item active" data-page="dashboard">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+Dashboard
+</button>
+<button class="nav-item" data-page="projects">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/><path d="M6 12h12"/><path d="M6 16h8"/></svg>
+Projects
+</button>
+<button class="nav-item" data-page="settings">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+Settings
+</button>
+</nav>
+</aside>
+
+<main class="main-content" id="mainContent">
+<div class="header">
+<h2 id="pageTitle">Dashboard</h2>
+<div class="header-actions">
+<button class="btn btn-primary" id="addProjectBtn" style="display:none"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Add Project</button>
+<button class="btn btn-secondary" id="logoutBtn"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>Logout</button>
+</div>
+</div>
+
+<div id="dashboardPage">
+<div class="stats-grid">
+<div class="card stat-card"><div class="stat-value" id="totalProjects">0</div><div class="stat-label">Total Projects</div></div>
+<div class="card stat-card"><div class="stat-value" id="publishedProjects">0</div><div class="stat-label">Published</div></div>
+<div class="card stat-card"><div class="stat-value" id="draftProjects">0</div><div class="stat-label">Drafts</div></div>
+<div class="card stat-card"><div class="stat-value" id="totalViews">0</div><div class="stat-label">Total Views</div></div>
+</div>
+<div class="card">
+<div class="table-container">
+<table><thead><tr><th>Project</th><th>Technologies</th><th>Status</th><th>Updated</th><th>Actions</th></tr></thead><tbody id="recentProjectsTable"></tbody></table>
+</div>
+</div>
+</div>
+
+<div id="projectsPage" style="display:none">
+<div class="card">
+<div class="table-container">
+<table><thead><tr><th>Project</th><th>Technologies</th><th>Status</th><th>Created</th><th>Updated</th><th>Actions</th></tr></thead><tbody id="projectsTable"></tbody></table>
+</div>
+<div class="empty-state" id="emptyProjects" style="display:none">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 9h6"/><path d="M9 13h4"/></svg>
+<h3>No projects yet</h3>
+<p>Click "Add Project" to create your first project</p>
+</div>
+</div>
+</div>
+
+<div id="settingsPage" style="display:none">
+<div class="card" style="max-width:600px">
+<div class="modal-body">
+<h3 style="margin-bottom:24px">Admin Settings</h3>
+<div class="form-group">
+<label>Admin Email</label>
+<input type="email" id="adminEmail" disabled>
+</div>
+<div class="form-group">
+<label>Portfolio Title</label>
+<input type="text" id="portfolioTitle" value="Kamaldeep | Digital Marketing with AI">
+</div>
+<div class="form-group">
+<label>Site Description</label>
+<textarea id="siteDescription">Digital Marketing with AI Portfolio</textarea>
+</div>
+<div class="form-group">
+<label>GitHub URL</label>
+<input type="url" id="githubUrl" value="https://github.com/kamalsheokand615-debug">
+</div>
+<div class="form-group">
+<label>LinkedIn URL</label>
+<input type="url" id="linkedinUrl" value="https://www.linkedin.com/in/kamal-sheokand-615-">
+</div>
+<div class="form-group">
+<label>Email</label>
+<input type="email" id="contactEmail" value="kamalsheokand615@gmail.com">
+</div>
+<button class="btn btn-primary" id="saveSettingsBtn">Save Settings</button>
+</div>
+</div>
+</div>
+</main>
+</div>
+
+<div class="modal-overlay" id="projectModal">
+<div class="modal">
+<div class="modal-header">
+<h3 id="modalTitle">Add Project</h3>
+<button class="modal-close" id="closeModal">&times;</button>
+</div>
+<div class="modal-body">
+<form id="projectForm">
+<input type="hidden" id="projectId">
+<div class="form-grid">
+<div class="form-group"><label>Title *</label><input type="text" id="title" required placeholder="Project title"></div>
+<div class="form-group"><label>Status *</label><select id="status" required><option value="draft">Draft</option><option value="published">Published</option></select></div>
+<div class="form-group full-width"><label>Description *</label><textarea id="description" required placeholder="Project description"></textarea></div>
+<div class="form-group full-width"><label>Problem</label><textarea id="problem" placeholder="What problem does this solve?"></textarea></div>
+<div class="form-group full-width"><label>Outcome</label><textarea id="outcome" placeholder="What was the result?"></textarea></div>
+<div class="form-group full-width"><label>Technologies (comma separated)</label><input type="text" id="technologies" placeholder="React, Node.js, AI Agent"></div>
+<div class="form-group"><label>GitHub URL</label><input type="url" id="githubUrl" placeholder="https://github.com/..."></div>
+<div class="form-group"><label>Live Demo URL</label><input type="url" id="demoUrl" placeholder="https://..."></div>
+<div class="form-group full-width"><label>Thumbnail Image URL</label><input type="url" id="thumbnailUrl" placeholder="https://... (optional)"></div>
+<div class="form-group"><label>Sort Order</label><input type="number" id="sortOrder" value="0" min="0"></div>
+<div class="form-group"><label>Featured</label><div style="display:flex;align-items:center;gap:12px"><input type="checkbox" id="featured" style="width:18px;height:18px;accent-color:var(--a)"><span style="font-size:.9rem;color:var(--mu)">Show in featured section</span></div></div>
+</div>
+</form>
+</div>
+<div class="modal-footer">
+<button class="btn btn-secondary" id="cancelModal">Cancel</button>
+<button class="btn btn-primary" id="saveProjectBtn" type="submit" form="projectForm">Save Project</button>
+</div>
+</div>
+</div>
+
+<div class="modal-overlay" id="deleteModal">
+<div class="modal" style="max-width:400px">
+<div class="modal-header"><h3>Delete Project</h3><button class="modal-close" id="closeDeleteModal">&times;</button></div>
+<div class="modal-body"><p>Are you sure you want to delete this project? This action cannot be undone.</p></div>
+<div class="modal-footer"><button class="btn btn-secondary" id="cancelDelete">Cancel</button><button class="btn btn-danger" id="confirmDelete">Delete</button></div>
+</div>
+</div>
+
+<div id="toastContainer"></div>
+
+<script type="module">
+import { supabase } from './supabase-config.js';
+
+let currentUser = null;
+let deleteProjectId = null;
+
+const pages = {dashboard: document.getElementById('dashboardPage'), projects: document.getElementById('projectsPage'), settings: document.getElementById('settingsPage')};
+const navItems = document.querySelectorAll('.nav-item');
+
+function showPage(page) {
+Object.values(pages).forEach(p => p.style.display = 'none');
+pages[page].style.display = 'block';
+document.getElementById('pageTitle').textContent = page.charAt(0).toUpperCase() + page.slice(1);
+document.getElementById('addProjectBtn').style.display = page === 'projects' ? 'inline-flex' : 'none';
+navItems.forEach(item => item.classList.toggle('active', item.dataset.page === page));
+closeSidebar();
+}
+
+navItems.forEach(item => item.addEventListener('click', () => showPage(item.dataset.page)));
+
+document.getElementById('mobileMenuBtn').addEventListener('click', () => {
+document.getElementById('sidebar').classList.add('open');
+document.getElementById('sidebarOverlay').classList.add('open');
+});
+document.getElementById('sidebarOverlay').addEventListener('click', closeSidebar);
+function closeSidebar() {document.getElementById('sidebar').classList.remove('open');document.getElementById('sidebarOverlay').classList.remove('open');}
+
+function showToast(message, type = 'error') {
+const container = document.getElementById('toastContainer');
+const toast = document.createElement('div');
+toast.className = `error-toast ${type === 'success' ? 'success-toast' : ''}`;
+toast.textContent = message;
+container.appendChild(toast);
+setTimeout(() => {toast.style.animation = 'slideIn .3s reverse';setTimeout(() => toast.remove(), 300);}, 4000);
+}
+
+async function checkAuth() {
+const { data: { session } } = await supabase.auth.getSession();
+if (!session) {
+window.location.href = '/admin/login.html';
+return;
+}
+currentUser = session.user;
+document.getElementById('adminEmail').value = currentUser.email;
+loadDashboard();
+loadProjects();
+loadSettings();
+}
+
+async function loadDashboard() {
+const { data: projects } = await supabase.from('projects').select('*');
+if (projects) {
+document.getElementById('totalProjects').textContent = projects.length;
+document.getElementById('publishedProjects').textContent = projects.filter(p => p.status === 'published').length;
+document.getElementById('draftProjects').textContent = projects.filter(p => p.status === 'draft').length;
+document.getElementById('totalViews').textContent = projects.reduce((sum, p) => sum + (p.views || 0), 0);
+renderProjectsTable(projects.slice(0, 5), 'recentProjectsTable');
+}
+}
+
+async function loadProjects() {
+const { data: projects, error } = await supabase.from('projects').select('*').order('sort_order', { ascending: true });
+if (error) {showToast(error.message); return;}
+const table = document.getElementById('projectsTable');
+const empty = document.getElementById('emptyProjects');
+if (projects && projects.length > 0) {
+table.parentElement.style.display = 'block';
+empty.style.display = 'none';
+renderProjectsTable(projects, 'projectsTable');
+} else {
+table.parentElement.style.display = 'none';
+empty.style.display = 'block';
+}
+}
+
+function renderProjectsTable(projects, tableId) {
+const tbody = document.getElementById(tableId);
+tbody.innerHTML = projects.map(p => `
+<tr data-id="${p.id}">
+<td><img src="${p.thumbnail_url || 'data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 60 40%22><rect fill=%22%231a1a2e%22 width=%2260%22 height=%2240%22 rx=%224%22/><text x=%2250%25%22 y=%2250%25%22 dominant-baseline=%22middle%22 text-anchor=%22middle%22 fill=%22%2338bdf8%22 font-size=%2210%22>No Image</text></svg>'}" class="project-thumb" alt="${p.title}"><div class="project-title">${p.title}</div></td>
+<td><div class="project-tech">${(p.technologies || []).map(t => `<span class="tech-tag">${t}</span>`).join('')}</div></td>
+<td><span class="status status-${p.status}">${p.status}</span></td>
+<td>${p.created_at ? new Date(p.created_at).toLocaleDateString() : '-'}</td>
+${tableId === 'projectsTable' ? `<td>${p.updated_at ? new Date(p.updated_at).toLocaleDateString() : '-'}</td>` : ''}
+<td><div class="action-btns"><button class="btn btn-sm btn-secondary edit-btn" data-id="${p.id}">Edit</button><button class="btn btn-sm btn-danger delete-btn" data-id="${p.id}">Delete</button></div></td>
+</tr>`).join('');
+tbody.querySelectorAll('.edit-btn').forEach(btn => btn.addEventListener('click', () => openProjectModal(btn.dataset.id)));
+tbody.querySelectorAll('.delete-btn').forEach(btn => btn.addEventListener('click', () => openDeleteModal(btn.dataset.id)));
+}
+
+function openProjectModal(id = null) {
+const modal = document.getElementById('projectModal');
+const form = document.getElementById('projectForm');
+form.reset();
+document.getElementById('projectId').value = '';
+document.getElementById('modalTitle').textContent = id ? 'Edit Project' : 'Add Project';
+
+if (id) {
+const row = document.querySelector(`#projectsTable tr[data-id="${id}"]`);
+if (row) {
+const cells = row.querySelectorAll('td');
+document.getElementById('projectId').value = id;
+document.getElementById('title').value = cells[0].querySelector('.project-title').textContent;
+document.getElementById('status').value = cells[2].querySelector('.status').textContent.toLowerCase();
+}
+const { data: project } = await supabase.from('projects').select('*').eq('id', id).single();
+if (project) {
+document.getElementById('description').value = project.description || '';
+document.getElementById('problem').value = project.problem || '';
+document.getElementById('outcome').value = project.outcome || '';
+document.getElementById('technologies').value = (project.technologies || []).join(', ');
+document.getElementById('githubUrl').value = project.github_url || '';
+document.getElementById('demoUrl').value = project.demo_url || '';
+document.getElementById('thumbnailUrl').value = project.thumbnail_url || '';
+document.getElementById('sortOrder').value = project.sort_order || 0;
+document.getElementById('featured').checked = project.featured || false;
+}
+}
+modal.classList.add('open');
+}
+
+async function saveProject(e) {
+e.preventDefault();
+const id = document.getElementById('projectId').value;
+const projectData = {
+title: document.getElementById('title').value.trim(),
+status: document.getElementById('status').value,
+description: document.getElementById('description').value.trim(),
+problem: document.getElementById('problem').value.trim(),
+outcome: document.getElementById('outcome').value.trim(),
+technologies: document.getElementById('technologies').value.split(',').map(t => t.trim()).filter(Boolean),
+github_url: document.getElementById('githubUrl').value.trim() || null,
+demo_url: document.getElementById('demoUrl').value.trim() || null,
+thumbnail_url: document.getElementById('thumbnailUrl').value.trim() || null,
+sort_order: parseInt(document.getElementById('sortOrder').value) || 0,
+featured: document.getElementById('featured').checked,
+updated_at: new Date().toISOString()
+};
+
+let error;
+if (id) {
+const { error: err } = await supabase.from('projects').update(projectData).eq('id', id);
+error = err;
+} else {
+const { error: err } = await supabase.from('projects').insert({...projectData, created_at: new Date().toISOString()});
+error = err;
+}
+
+if (error) {showToast(error.message); return;}
+showToast(id ? 'Project updated' : 'Project created', 'success');
+closeModal();
+loadDashboard();
+loadProjects();
+}
+
+function closeModal() {document.getElementById('projectModal').classList.remove('open');}
+function openDeleteModal(id) {deleteProjectId = id; document.getElementById('deleteModal').classList.add('open');}
+function closeDeleteModal() {deleteProjectId = null; document.getElementById('deleteModal').classList.remove('open');}
+
+async function confirmDelete() {
+if (!deleteProjectId) return;
+const { error } = await supabase.from('projects').delete().eq('id', deleteProjectId);
+if (error) {showToast(error.message); return;}
+showToast('Project deleted', 'success');
+closeDeleteModal();
+loadDashboard();
+loadProjects();
+}
+
+async function loadSettings() {
+const { data } = await supabase.from('settings').select('*').eq('id', 'main').single();
+if (data) {
+document.getElementById('portfolioTitle').value = data.portfolio_title || '';
+document.getElementById('siteDescription').value = data.site_description || '';
+document.getElementById('githubUrl').value = data.github_url || '';
+document.getElementById('linkedinUrl').value = data.linkedin_url || '';
+document.getElementById('contactEmail').value = data.contact_email || '';
+}
+}
+
+async function saveSettings() {
+const settings = {
+id: 'main',
+portfolio_title: document.getElementById('portfolioTitle').value,
+site_description: document.getElementById('siteDescription').value,
+github_url: document.getElementById('githubUrl').value,
+linkedin_url: document.getElementById('linkedinUrl').value,
+contact_email: document.getElementById('contactEmail').value,
+updated_at: new Date().toISOString()
+};
+const { error } = await supabase.from('settings').upsert(settings);
+if (error) {showToast(error.message); return;}
+showToast('Settings saved', 'success');
+}
+
+document.getElementById('logoutBtn').addEventListener('click', async () => {
+await supabase.auth.signOut();
+window.location.href = '/admin/login.html';
+});
+
+document.getElementById('addProjectBtn').addEventListener('click', () => openProjectModal());
+document.getElementById('closeModal').addEventListener('click', closeModal);
+document.getElementById('cancelModal').addEventListener('click', closeModal);
+document.getElementById('projectForm').addEventListener('submit', saveProject);
+document.getElementById('closeDeleteModal').addEventListener('click', closeDeleteModal);
+document.getElementById('cancelDelete').addEventListener('click', closeDeleteModal);
+document.getElementById('confirmDelete').addEventListener('click', confirmDelete);
+document.getElementById('saveSettingsBtn').addEventListener('click', saveSettings);
+
+document.getElementById('projectModal').addEventListener('click', e => {if (e.target === e.currentTarget) closeModal();});
+document.getElementById('deleteModal').addEventListener('click', e => {if (e.target === e.currentTarget) closeDeleteModal();});
+
+checkAuth();
+</script>
+</body>
+</html>

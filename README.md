@@ -23,7 +23,11 @@ Do **not** re-run the kit's `supabase/schema.sql`; the tables are already there.
 
 ## What the admin can edit
 
-Hero/about/SEO, skills, projects, certifications, coding profiles, blog posts, media library and contact messages. Portfolio sections hide automatically when they have no published data; if Supabase is unreachable, the original hardcoded content stays visible.
+Hero/about, skills, projects, certifications, coding profiles, blog posts, media library and contact messages. Portfolio sections hide automatically when they have no published data; if Supabase is unreachable, the original hardcoded content stays visible.
+
+## SEO metadata
+
+Each portfolio route keeps its own title, description, Open Graph and Twitter tags in its HTML `<head>` (`portfolio/index.html` and `portfolio-zip/index.html`). These are static and unique per route, so the admin panel no longer overrides them. Sections stay in the same single page with their existing `id` and `h2`/`h3` headings.
 
 ## Files
 

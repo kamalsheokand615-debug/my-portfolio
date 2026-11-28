@@ -52,7 +52,6 @@ const SETTINGS_FIELDS = [
   ['name', 'Your name', 'text'], ['tagline', 'Tagline', 'text'], ['bio', 'About you', 'textarea-lg'],
   ['photo_url', 'Profile photo', 'image'], ['resume_url', 'Resume (PDF link)', 'text'],
   ['email', 'Email', 'text'], ['phone', 'Phone', 'text'],
-  ['seo_title', 'SEO title', 'text'], ['seo_description', 'SEO description', 'textarea'],
   ['primary_color', 'Theme color', 'color'],
 ]
 

@@ -46,12 +46,6 @@ function hide(selector, hidden) {
 
 function applySettings(s) {
   if (!s) return
-  if (s.seo_title) document.title = s.seo_title
-  if (s.seo_description) {
-    let meta = document.querySelector('meta[name="description"]')
-    if (!meta) { meta = document.createElement('meta'); meta.name = 'description'; document.head.appendChild(meta) }
-    meta.content = s.seo_description
-  }
   if (s.name) {
     const brand = document.querySelector('nav b')
     if (brand) brand.textContent = s.name

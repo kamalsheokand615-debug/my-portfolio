@@ -91,8 +91,8 @@ DROP POLICY IF EXISTS "media_admin_delete" ON storage.objects;
 CREATE POLICY "media_admin_delete" ON storage.objects FOR DELETE USING (bucket_id = 'media' AND public.is_admin());
 
 -- 6) Site settings row (agar nahi hai)
-INSERT INTO public.site_settings (id, name, tagline, bio, email, seo_title, primary_color)
+INSERT INTO public.site_settings (id, name, tagline, bio, email, primary_color)
 VALUES (1, 'Kamaldeep', 'Digital Marketer with AI,SEO Specialist,Video Editor,AI Content Creator',
         'I mix digital marketing with the power of AI to build smarter content, better SEO and campaigns that actually get noticed.',
-        'kamalsheokand615@gmail.com', 'Kamaldeep | Digital Marketing with AI', '#2563eb')
+        'kamalsheokand615@gmail.com', '#2563eb')
 ON CONFLICT (id) DO NOTHING;
